@@ -1,0 +1,50 @@
+.w{
+    width: 1200px;
+    margin: auto;
+}
+body{
+    background-color:white;
+}
+li{
+    list-style: none;
+}
+a{
+    text-decoration: none;
+}
+.header{
+    height: 42px;
+    background-color: rgb(96, 159, 214);
+    margin: 30px auto;
+}
+.logo{
+    float: left;
+    width: 144px;
+    height: 42px;
+    background-color: pink;
+}
+.nav{
+    float:left;
+}
+.nav ul li{
+    float:left;
+    margin: 0 0px;
+}
+.nav ul li a{
+    display: block;
+    height: 25px;
+    padding: 0 15px;
+    line-height: 12px;
+    font-size: 18px;
+    color:white
+}
+.nav ul li a:hover{
+    border-bottom: 2px solid white;
+    color:pink
+}
+.user{
+    float:right;
+    line-height: 42px;
+    margin-right: 30px;
+    font-size:12px;
+    color:white;
+}
