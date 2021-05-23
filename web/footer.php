@@ -1,0 +1,7 @@
+<footer class="footer">
+    <!-- <div class="w"> -->
+        <div class="copyright">
+            Copyright @2021-2021 12307-Book-System &nbsp;&nbsp;All Right Abandoned.
+        </div>
+    <!-- </div> -->
+</footer>

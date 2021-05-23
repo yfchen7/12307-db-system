@@ -8,7 +8,7 @@
 <body>
     <div class="header w">
         <div class = "logo">
-            <a href="index.html"><img src="images/logo1.png" alt=""></a>
+            <a href="index.php"><img src="images/logo1.png" alt=""></a>
         </div>
         <div class="nav">
             <ul>
