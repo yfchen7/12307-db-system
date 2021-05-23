@@ -1,59 +1,39 @@
 <?php 
-/**
-* login
-*/
-class Login
+
+include_once("utils.php");
+
+function checkAccess()
 {
-    public $username;
-	public $password;
-    public $conn;
-	function __construct()
-	{
-		if (!isset($_POST['login'])) {
-			echo "<script>alert('You access the page does not exist!');history.go(-1);</script>";
-			exit();
-		}
-		session_start();
-		$this->username = $_POST['username'];
-		$this->password = $_POST['password'];
-        $conn = pg_connect("host=localhost dbname=b12307 user=root password=root") or die('connection failed');
+	if (!isset($_POST['login'])) {
+		echo "<script>alert('没有权限访问');history.go(-1);</script>";
+		exit();
 	}
-
-
-	public function checkPwd()
-	{
-		$strlen = strlen($this->password);
-		echo $this->password, $this->username;
-		
-	}
-
-
-	public function checkUser()
-	{
-		//数据库验证
-		$db = new mysqli(DB_HOST,DB_USER,DB_PWD,DB_NAME) or die('数据库连接异常');
-		$sql = "SELECT username FROM users WHERE email = '".$this->email."' and password = '".$this->password."'";
-		$result = mysqli_fetch_row($db->query($sql))[0];
-		if (!$result) {
-			echo "<script>alert('Email or password is incorrect.please try again!');history.go(-1);</script>";
-			exit();
-		}else{
-			$db->close();
-			$_SESSION['user'] = $result;
-			if ($this->rem == 1) {
-			  $_SESSION['rem'] = '1';
-			}
-			echo "<script>alert('Login Success!');location.href = '/index.php'</script>";
-			exit();
-		}
-	}
-
-	public function doLogin()
-	{
-		$this->checkPwd();
-	}
+	session_start();
 }
 
-$login = new Login();
-$login->doLogin();
+function checkPasswd()
+{
+	$err = '登录失败';	
+	$username = $_POST['username'];
+	//if(!preg_match("/^\d{11}$/",$phone)) {$err = '手机号格式有误'; goto FAIL;}
+	$password = $_POST['password'];
+	$passwdhash = $password;
+
+	$conn = mypg_connect();
+	$sql = "select  * from usr where u_username='$username' and u_passwdhash='$passwdhash' limit 1;";
+	$ret = mypg_query($conn,$sql);
+	$row = pg_fetch_row($ret);
+	if(empty($row)) goto FAIL;
+	$_SESSION['usr'] = $row;
+	echo "<script>alert('登录成功');location.href = '../index.php'</script>";
+	exit();
+FAIL:
+	echo "<script>alert('{$err}');history.go(-1);</script>";
+	exit();
+}
+
+checkAccess();
+checkPasswd();
+
+?>
 

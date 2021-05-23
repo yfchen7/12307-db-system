@@ -50,14 +50,17 @@ create table seatleft (sl_stationid      integer not null,
                        foreign key (sl_trainid , sl_day) references runday(r_trainid , r_day),
                        foreign key (sl_trainid , sl_seattype) references seat(se_trainid , se_seattype)
                      );
-create table user    (u_userid       integer primary key,
+                     //user is a reserved word
+create table usr     (u_userid       integer primary key,
+                      u_username     varchar(20) unique,
+                      u_phone        char(11) unique,
                       u_realid       char(18) unique,
-                      u_passwdhash   char(32) not null,
-                      u_phone        bigint unique,
                       u_realname     varchar(20) not null,
-                      u_username     varchar(20) not null,
+                      u_passwdhash   char(32) not null,
                       u_ccard        char(16) not null
                       );
+
+insert into usr values(1,'江湖骗子','10086',2333,'王鲑鱼','233','88888');
 create table order   (o_orderid       integer primary key,
                       o_userid        integer not null,
                       o_trainid       integer not null,

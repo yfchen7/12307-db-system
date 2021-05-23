@@ -4,12 +4,18 @@
     </div>
     <div class="nav">
         <ul>
-            <li><a href="#">首页</a></li>
-            <li><a href="#">购票</a></li>
+            <li><a href="index.php">首页</a></li>
+            <li><a href="query.php">购票</a></li>
             <li><a href="#">订单</a></li>
         </ul>
     </div>
     <div class="user">
-        username
+        <?php 
+            session_start();
+            if(isset($_SESSION['usr']))
+                echo "{$_SESSION['usr'][1]} &nbsp;<a href=\"./php/logout.php\">注销</a>";
+            else echo '<a href="login.php">登录</a>&nbsp;&nbsp;
+                        <a href="register.php">注册</a>';
+        ?>
     </div>
 </div>
