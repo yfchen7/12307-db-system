@@ -7,7 +7,7 @@
     <div class="w"> 
       <span class="aera">
         <h4>按车次查询</h4>
-        <form action="php/querytrain.php" method="post" accept-charset="utf-8" class="form">
+        <form action="php/query.php" method="get" accept-charset="utf-8" class="form">
         <ul>
           <li><label>车次号：</label><input type="text"name="trainno"required="required"maxlength=6>
           <span class="small">不区分大小写</span></li>

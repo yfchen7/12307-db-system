@@ -1,5 +1,5 @@
 create type seattype as enum('硬座','软座','硬卧上','硬卧中','硬卧下','软卧上','软卧下');
-create type order_status as enum('未出发','已完成','已取消');
+create type order_status as enum('有效','已取消');
 create table city    (c_cityid      integer primary key,
                       c_name        varchar(20) unique
                     );   
@@ -11,16 +11,14 @@ create table station (s_stationid   integer primary key,
 create table train   (t_trainid     integer primary key,
                       t_trainno     char(6) unique
                     );                    
-create table seat    (se_trainid    integer not null,
-                      se_seattype   seattype,
-                      primary key (se_trainid , se_seattype),
-                      foreign key (se_trainid) references train(t_trainid)
-                    );
+create table runday  (r_day           Date primary key
+                      );
 create table stop    (sp_stationid      integer not null,
                       sp_trainid        integer not null,
                       sp_arrivetime     time,
                       sp_departtime     time,
                       sp_count          integer not null,
+                      sp_seq            integer not null,
                       primary key (sp_stationid , sp_trainid),
                       foreign key (sp_stationid) references station(s_stationid),
                       foreign key (sp_trainid) references train(t_trainid)
@@ -31,14 +29,10 @@ create table price   (p_stationid  integer not null,
                       p_price      decimal(15,2) not null,
                       primary key (p_stationid , p_trainid, p_seattype),
                       foreign key (p_stationid) references station(s_stationid),
-                      foreign key (p_trainid) references train(t_trainid),
-                      foreign key (p_trainid , p_seattype) references seat(se_trainid , se_seattype)
+                      foreign key (p_trainid) references train(t_trainid)
+                      --foreign key (p_trainid , p_seattype) references seat(se_trainid , se_seattype)
                       );
-create table runday  (r_day           Date primary key
-                      --r_trainid      integer not null,
-                      --primary key (r_day , r_trainid),
-                      --foreign key (r_trainid) references train(t_trainid)
-                      );
+
 create table seatleft (sl_stationid      integer not null,
                        sl_trainid        integer not null,
                        sl_day            Date,
@@ -46,12 +40,12 @@ create table seatleft (sl_stationid      integer not null,
                        sl_seatleft       integer not null,
                        primary key (sl_stationid , sl_day , sl_trainid , sl_seattype),
                        foreign key (sl_stationid) references station(s_stationid),
-                       foreign key (sl_trainid) references train(t_trainid), 
-                       --foreign key (sl_day) references runday(r_day),
+                       foreign key (sl_trainid) references train(t_trainid),
+                       foreign key (sl_day) references runday(r_day)
                        --foreign key (sl_seattype) references seat(se_seattype),
-                       foreign key (sl_day) references runday(r_day),
+                       --foreign key (sl_day) references runday(r_day),
                        --foreign key (sl_trainid , sl_day) references runday(r_trainid , r_day),
-                       foreign key (sl_trainid , sl_seattype) references seat(se_trainid , se_seattype)
+                       --foreign key (sl_trainid , sl_seattype) references seat(se_trainid , se_seattype)
                      );
 create table usr     (u_userid       integer primary key,
                       u_username     varchar(20) unique,
@@ -83,3 +77,8 @@ create table orders   (o_orderid       integer primary key,
 
 
 
+create table seat    (se_trainid    integer not null,
+                      se_seattype   seattype,
+                      primary key (se_trainid , se_seattype),
+                      foreign key (se_trainid) references train(t_trainid)
+                    );

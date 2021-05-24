@@ -15,7 +15,8 @@
         <form action="php/admin.php" method="post" accept-charset="utf-8" class="form">
           <ul><li><label>日期：</label><input type="date"name="fromday"id="fromday" required="required"></ul>
           <!-- <ul><li><label>到：</label><input type="date"name="today"id="today" required="required"></ul> -->
-          <input type="submit"value="开放购票"name="openbuy">
+          <input type="submit"value="开放购票"name="openbuy" onclick="document.getElementById('wait').innerHTML='请稍等'">
+          <span id="wait"></span>
         </form>
         <form action="php/admin.php" method="post">
           <br><input type="submit"value="查看开放购票日期"name="buyday">
