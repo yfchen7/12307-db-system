@@ -33,7 +33,7 @@
           <li><label>确认密码：</label><input type="password"name="checkpassword"required="required"maxlength=20>
           <span class="small">*1-20字符</span></li>
         </ul>
-        <input type="submit"value="注册"name="register"class="botton form">
+        <input type="submit"value="注册"name="register"class="botton">
         </form>
 		  </span>
     </div>

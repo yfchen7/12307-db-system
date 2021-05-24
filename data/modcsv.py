@@ -1,0 +1,2 @@
+
+file = "./process/price.csv"

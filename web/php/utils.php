@@ -11,5 +11,9 @@
 	    if(!$ret) die(pg_last_error());
         return $ret;
     }
+    function ret_botton()
+    {
+        echo "<br><button onclick=\"history.go(-1)\">返回</button>";
+    }
     
 ?>

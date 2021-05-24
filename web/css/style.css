@@ -61,7 +61,6 @@ a{
     text-align: center;
 }
 
-
 .aera{
     height: auto;
     margin-top: 20px;
@@ -70,6 +69,8 @@ a{
 .aera h4{
     text-align: center;
     height: 42px;
+    width: 600px;
+    margin: 20px auto;
     line-height: 42px;
     font-size: 18px;
     font-weight: 400;
@@ -92,7 +93,7 @@ a{
 }
 
 .form ul li input{
-    width: 200px;
+    width: 180px;
     height: 20px;
     margin-right: 8px;
     border:1px solid #ccc;
@@ -113,6 +114,31 @@ a{
 }
 
 .small{
+    height:13px;
     font-size: 12px;
 }
 
+.default-table {
+    border-collapse: collapse;
+    width: auto;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.default-table td, .default-table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.default-table tr:nth-child(even){background-color: #f2f2f2;}
+
+.default-table tr:hover {background-color: #ddd;}
+
+.default-table th {
+    font-weight:500;
+    font-size: 14px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: #4CAF50;
+    color: white;
+}

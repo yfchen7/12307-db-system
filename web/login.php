@@ -13,7 +13,7 @@
           <li><label>密码：</label><input type="password"name="password"required="required"maxlength=20>
           <span class="small"></span></li>
         </ul>
-        <input type="submit"value="登录"name="login"class="botton form">
+        <input type="submit"value="登录"name="login"class="botton">
         </form>
 		  </span>
     </div>
