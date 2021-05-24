@@ -10,8 +10,10 @@
         </ul>
     </div>
     <div class="user">
-        <?php 
-            session_start();
+        <?php
+            if(!isset($_SESSION)) {
+                session_start();
+            } 
             if(isset($_SESSION['usr']))
                 echo "{$_SESSION['usr'][1]} &nbsp;<a href=\"/php/logout.php\">注销</a>";
             else echo '<a href="/login.php">登录</a>&nbsp;&nbsp;

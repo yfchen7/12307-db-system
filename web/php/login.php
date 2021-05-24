@@ -1,15 +1,8 @@
 <?php 
 
 include_once("utils.php");
-
-function checkAccess()
-{
-	if (!isset($_POST['login'])) {
-		echo "<script>alert('没有权限访问');history.go(-1);</script>";
-		exit();
-	}
-	session_start();
-}
+check_access('login');
+checkPasswd();
 
 function checkPasswd()
 {
@@ -32,8 +25,7 @@ FAIL:
 	exit();
 }
 
-checkAccess();
-checkPasswd();
+
 
 ?>
 

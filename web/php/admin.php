@@ -36,9 +36,8 @@ function openbuy()
   $conn = mypg_connect();
 	$sql = "insert into runday values('$fromday');";
 	$ret = pg_query($conn,$sql);
-  if(!$ret) echo "<script>alert('日期已存在');history.go(-1);</script>";
+  if(!$ret) echo "<script>alert('该日期已经开放购票');history.go(-1);</script>";
   else echo "<script>alert('{$fromday}购票已开放');history.go(-1);</script>";
-  exit();
 }
 
 

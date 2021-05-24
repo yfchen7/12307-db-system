@@ -1,15 +1,8 @@
 <?php 
 
 include_once("utils.php");
-
-function checkAccess()
-{
-	if (!isset($_POST['register'])) {
-		echo "<script>alert('没有权限访问');history.go(-1);</script>";
-		exit();
-	}
-	session_start();
-}
+check_access('register');
+checkRegister();
 
 function checkRegister()
 {
@@ -45,9 +38,6 @@ FAIL:
 	echo "<script>alert('{$err}');history.go(-1);</script>";
 	exit();
 }
-
-checkAccess();
-checkRegister();
 
 ?>
 

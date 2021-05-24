@@ -1,2 +1,0 @@
-
-file = "./process/price.csv"

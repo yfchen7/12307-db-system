@@ -31,11 +31,13 @@
         
 		  </span>
     </div>    
-    <?php require_once 'footer.php'?>
+    <?php setTotal(); require_once 'footer.php'?>
   </body>
 </html>
 
 <?php
+function setTotal()
+{
   include_once("php/utils.php");
   $conn = mypg_connect();
   $sql = "select count(*) from orders;";
@@ -48,5 +50,5 @@
   $totalprice = empty($row[0]) ? 0 : $row[0];
   echo "<script>document.getElementById(\"totalorder\").innerHTML={$totalorder};</script>";
   echo "<script>document.getElementById(\"totalprice\").innerHTML={$totalprice};</script>";
-  exit();
+}
 ?>
