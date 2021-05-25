@@ -5,10 +5,13 @@
     <?php require_once 'nav.php'?>
     <div class="center w">
         welcome to 12307 book system
-        <a href="login.php">test<br></a>
+        <button onclick ="location='php/orders.php?userid=1'")>test</button>
         <?php 
-            if(isset($_SESSION['usr']) and $_SESSION['usr'][1]=='admin')
-              echo "欢迎您，管理员<br><a href=\"./admin.php\">管理入口</a>";
+            if(isset($_SESSION['usr'])){
+              echo "欢迎您，{$_SESSION['usr'][1]}<br>";
+              if($_SESSION['usr'][1]=='admin')
+                echo "<a href=\"./admin.php\">管理入口</a>";
+            }
         ?>
     </div>
     

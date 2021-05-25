@@ -2,18 +2,35 @@
 
 include_once("utils.php");
 check_access('trainno');
+include_once("../checklogin.php");
+
 do_book();
+
 
 function do_book()
 {
-	$err = '信息有误，购买失败';	
+	//$err = '信息有误，购买失败';	
 	$trainno = $_POST['trainno'];
   $sname = $_POST['sname'];
   $sday = $_POST['sday'];
   $ename = $_POST['ename'];
   $seattype = $_POST['seattype'];
+  $userid = $_SESSION['usr'][0];
 	$conn = mypg_connect();
-	$sql = "
+  if(check_sl($conn,$sday,$trainno,$sname,$ename,$seattype) 
+    and update_sl($conn,$sday,$trainno, $sname,$ename,$seattype)
+    and gen_orders($conn,$userid, $sday,$trainno, $sname,$ename,$seattype)
+    
+  ) echo "<script>alert('购买成功');location.href = '../orders.php'</script>";
+  else{
+    "<script>alert('余票不足');history.go(-2);</script>";
+  }
+  exit();
+}
+
+function check_sl($conn, $sday,$trainno, $sname,$ename,$seattype)
+{
+  $sql = "
   SELECT
   min(sl_seatleft) as seatleft
 FROM
@@ -67,9 +84,10 @@ WHERE
   ";
 	$ret = mypg_query($conn,$sql);
 	$row = pg_fetch_row($ret);
-  if(!isset($row)) { fail();}
-	if(!$row) {$err="余票不足"; fail();
-  }
+  echo "$row";
+  if(!isset($row) or empty($row[0])) return false;
+	return true;
+}
 	
 function gen_orders($conn,$userid, $sday,$trainno, $sname,$ename,$seattype)
 {  
@@ -90,7 +108,7 @@ function gen_orders($conn,$userid, $sday,$trainno, $sname,$ename,$seattype)
     )
 SELECT
     (case when O1.orderid is null then 1 else O1.orderid+1 end),
-    1,
+    $userid,
     t_trainid,
     '有效',
     P2.p_price-P1.p_price as price,
@@ -133,7 +151,7 @@ WHERE
 	return true;
   }
 
-function update_sl($conn,$userid, $sday,$trainno, $sname,$ename,$seattype)
+function update_sl($conn,$sday,$trainno, $sname,$ename,$seattype)
 {
   $sql = "
   UPDATE
@@ -162,7 +180,7 @@ WHERE
     )or
     (
      SP1.sp_arrivetime<=SP1.sp_departtime and
-     sl_day='$sday'-SP1.sp_count
+     sl_day+SP1.sp_count='$sday'
     )
     )and
     sl_day=r_day and
@@ -188,15 +206,11 @@ WHERE
         )
     );
   ";
+  $ret = pg_query($conn,$sql);
+  if(!$ret) return false;
+  return true;
 }
 
-
-
-function fail()
-{
-	echo "<script>alert('{$err}');history.go(-1);</script>";
-	exit();
-}
 
 ?>
 

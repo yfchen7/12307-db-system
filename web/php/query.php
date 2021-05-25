@@ -22,6 +22,7 @@ function querytrain()
 {
 	$trainno = strtoupper($_GET['trainno']);
 	$day = $_GET['day'];
+  echo "$trainno<br>$day<br>";
 	$conn = mypg_connect();
 	$sql = "
   with  t1(t1_seatleft,t1_stationid,t1_trainid,t1_seattype) as
@@ -107,6 +108,7 @@ EOF;
     echo"</tr>";
   }
   echo "</table>";
+
 }
 
 
@@ -235,7 +237,7 @@ ORDER BY
   }
 
   echo "<table class=\"default-table\"border=\"1\">";
-  echo "<tr><th>出发站</th><th>到达站</th><th>车次</th><th>出发时间</th><th>到达时间</th><th>总耗时</th>
+  echo "<tr><th>车次</th><th>出发站</th><th>到达站</th><th>出发时间</th><th>到达时间</th><th>总耗时</th>
   <th>硬座</th><th>软座</th><th>硬卧上</th><th>硬卧中</th><th>硬卧下</th><th>软卧上</th><th>软卧下</th>
   <th>硬座</th><th>软座</th><th>硬卧上</th><th>硬卧中</th><th>硬卧下</th><th>软卧上</th><th>软卧下</th>
   <th>最低价格</th></tr>";
@@ -266,7 +268,16 @@ EOF;
     echo"</tr>";
   }
   echo "</table>";
+  $nextday = date("Y-m-d",strtotime("+1 day",strtotime($sday)));
+  echo $sday, $nextday;
+  queryreturn($ecity,$scity,$nextday);
+}
 
+function queryreturn($scity,$ecity,$sday)
+{
+  echo <<<EOF
+  <br><button onclick ="location='/query.php?scity=$scity&ecity=$ecity&sday=$sday'")>返程查询</button><br>
+EOF;
 }
 
 ?>

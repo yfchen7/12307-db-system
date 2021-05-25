@@ -18,6 +18,7 @@ include_once("utils.php");
 </html>
 
 <?php
+
 function gen_order()
 {
   $trainno = $_POST['trainno'];
@@ -37,10 +38,13 @@ function gen_order()
 }
 function gen_ticketinfo($trainno,$sname,$sday,$stime,$ename,$eday,$etime,$seattype,$price)
 {
+  $total = $price+5.1;
   echo "$trainno 号<br>
     $sday $stime - $eday $etime <br>
     $sname - $ename <br>
     $seattype ¥$price<br>
+    订票费5元<br>
+    总价格$total 元<br>
   ";
 }
 
@@ -57,7 +61,7 @@ function confirm_button($trainno,$sname,$sday,$stime,$ename,$eday,$etime,$seatty
 {
   echo <<<EOF
   <div><button class="botton" 
-  onclick=httpPost('buy.php',{"trainno":"$trainno","sname":"$sname","sday":"$sday","ename":"$ename","seattype":$seattype})>
+  onclick=httpPost('buy.php',{"trainno":"$trainno","sname":"$sname","sday":"$sday","ename":"$ename","seattype":"$seattype"})>
   确认购买</button></div>
 EOF;
 }

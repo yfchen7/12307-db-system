@@ -6,7 +6,7 @@
         <ul>
             <li><a href="/index.php">首页</a></li>
             <li><a href="/query.php">购票</a></li>
-            <li><a href="#">订单</a></li>
+            <li><a href="/orders.php">订单</a></li>
         </ul>
     </div>
     <div class="user">

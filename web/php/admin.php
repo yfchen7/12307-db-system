@@ -18,6 +18,13 @@ include_once("utils.php");
 
 <?php
 
+function hottrain()
+{
+  $conn = mypg_connect();
+	$sql = "select count(*) from orders where;";
+	$ret = mypg_query($conn,$sql);
+}
+
 function buyday()
 {
   $conn = mypg_connect();
