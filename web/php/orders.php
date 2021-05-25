@@ -58,8 +58,10 @@ WHERE
     SP2.sp_trainid=o_trainid and
     SP2.sp_stationid=o_arrivestation and
     S1.s_stationid=o_departstation and
-    S2.s_stationid=o_arrivestation;
-  ";
+    S2.s_stationid=o_arrivestation
+order by
+  departtime
+    ;";
 	$ret = mypg_query($conn,$sql);
   $row=pg_fetch_row($ret);
   echo "{$_SESSION['usr'][1]}的订单信息<br><br>";
@@ -74,9 +76,7 @@ WHERE
     }
     $str =<<<EOF
     <td>
-    <button onclick=httpGET('delorder.php',{"orderid:":"$row[0]"})>
-    取消订单
-    </button></td>
+    <button onclick=httpPost('delorder.php',{"orderid":"$row[0]"})>取消订单</button></td>
 EOF;
     echo "$str";
     $row=pg_fetch_row($ret);

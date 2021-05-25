@@ -7,8 +7,10 @@ include_once("utils.php");
     <?php require_once '../checkadmin.php'?>
     <div class="center w">
       <?php 
-        if(isset($_POST['openbuy'])) openbuy();
-        if(isset($_POST['buyday'])) buyday();
+        if(isset($_GET['hottrain'])) hottrain();
+        else if(isset($_GET['openbuy'])) openbuy();
+        else if(isset($_GET['alluser'])) alluser();
+        else if(isset($_GET['buyday'])) buyday();
         ret_button();
       ?>
     </div>    
@@ -17,12 +19,50 @@ include_once("utils.php");
 </html>
 
 <?php
+function alluser()
+{
+  $conn = mypg_connect();
+	$sql = "select * from usr order by u_userid;";
+	$ret = mypg_query($conn,$sql);
+  echo "<table class=\"default-table\"border=\"1\"><tr>
+  <th>id</th><th>用户名</th><th>手机号</th><th>身份证</th><th>真实姓名</th>
+  <th>信用卡</th><th></th>
+  </tr>";
+  while($row = pg_fetch_row($ret)){
+    echo "<tr>";
+    for($i=0;$i<7;$i++){
+      if($i==5) continue;
+      echo "<td>$row[$i]</td>";
+    }
+    echo "<td><button onclick =\"location='orders.php?userid=$row[0]'\")>查看订单</button></td>";
+    echo "</tr>";
+  }
+  echo "</table>";
+}
 
 function hottrain()
 {
   $conn = mypg_connect();
-	$sql = "select count(*) from orders where;";
+	$sql = "
+SELECT
+  t_trainno,
+  count(*) as sum
+FROM
+  train,
+  orders
+WHERE
+  t_trainid=o_trainid
+group by 
+  t_trainno
+order by 
+  sum desc limit 10;
+";
 	$ret = mypg_query($conn,$sql);
+  echo "<table class=\"default-table\"border=\"1\"><tr><th>热点车次</th><th>订单数</th></tr>";
+  while($row = pg_fetch_row($ret)){
+    echo "<tr><td>$row[0]</td><td>$row[1]</td</tr>";
+  }
+  echo "</table>";
 }
 
 function buyday()
@@ -39,7 +79,7 @@ function buyday()
 
 function openbuy()
 {
-  $fromday = ($_POST['fromday']);
+  $fromday = ($_GET['fromday']);
   $conn = mypg_connect();
 	$sql = "insert into runday values('$fromday');";
 	$ret = pg_query($conn,$sql);
