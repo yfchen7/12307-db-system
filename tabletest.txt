@@ -1,0 +1,269 @@
+create table stop    (tid integer primary key,
+                       arrtime time
+                       );
+
+insert into test
+values (123,25:3:4);
+
+with nextid as(
+select (case when (maxid) is null then 1 else maxid+1 end)
+from (select max(u_userid) as maxid from usr) as xxx
+)
+
+with as maxid (select max(u_userid) from usr)
+
+insert into usr 
+    select (case when maxid is null then 1 else maxid+1 end),
+    '测试','123','124','fff','1232','666' 
+    from (select max(u_userid) as maxid from usr) as xxx;
+
+SELECT *
+FROM stop as s
+PIVOT (
+ SUM(s.sp_price) FOR s.sp_seattype IN ('硬座','软座','硬卧上','硬卧中','硬卧下','软卧上','软卧下')
+)
+where 
+
+insert into usr 
+    values(3,
+    '测试1','123','124','fff','1232','666' );
+
+for file in 
+copy city from '/home/alphabet/db/12307-db-system/data/process/city.csv' with (format csv, delimiter ',');
+copy train from '/home/alphabet/db/12307-db-system/data/process/train.csv' with (format csv, delimiter ',');
+copy station from '/home/alphabet/db/12307-db-system/data/process/station.csv' with (format csv, delimiter ',');
+copy stop from '/home/alphabet/db/12307-db-system/data/process/stop.csv' with (format csv, delimiter ',');
+copy price from '/home/alphabet/db/12307-db-system/data/process/price.csv' with (format csv, delimiter ',');
+copy seat from '/home/alphabet/db/12307-db-system/data/process/seat.csv' with (format csv, delimiter ',');
+
+select s_name, sp_arrivetime, sp_departtime
+from station as s,stop as sp, train
+where s_stationid = sp_stationid and
+    sp_trainid=t_trainid and 
+    t_trainno='D3';
+
+  INSERT INTO 
+    seatleft(
+        sl_seatleft,
+        sl_trainid,
+        sl_stationid,
+        sl_seattype,
+        sl_day
+    )
+SELECT
+    5,
+    p_trainid, 
+    p_stationid, 
+    p_seattype,
+    '2021-05-26'
+FROM
+    price;
+  ";
+--放票
+INSERT INTO 
+    seatleft(
+        sl_seatleft,
+        sl_trainid,
+        sl_stationid,
+        sl_seattype,
+        sl_day
+    )
+SELECT
+    5,
+    p_trainid, 
+    p_stationid, 
+    p_seattype,
+    '2020.10.1'
+FROM
+    price;
+--发车日期
+INSERT INTO 
+    runday(
+        r_day,
+        r_trainid
+    )
+SELECT
+    '2020.10.1',
+    t_trainid
+FROM
+    train;
+
+
+
+SELECT 
+  s_name,
+  --sp_arrivetime,
+  --sp_departtime,sp_count,
+  max(case when p_seattype='硬座' then p_price else -1 end) as 硬座
+  --(case when p_seattype='硬卧上' then p_price else -1 end) as 硬卧上
+FROM
+  seatleft,station,train,stop,
+  price
+WHERE
+  sl_trainid=sp_trainid and
+  sl_trainid=t_trainid and
+  sl_day='2021-05-26' and
+  sp_stationid=s_stationid and
+  sp_stationid=sl_stationid and
+  t_trainno = 'T8' and
+  sl_trainid = p_trainid and
+  p_seattype = sl_seattype
+GROUP BY 
+  s_name,sp_arrivetime,sp_departtime,sp_count
+ORDER BY
+  sp_count,sp_arrivetime;
+
+
+
+  with  t1(t1_seatleft,t1_stationid,t1_trainid,t1_seattype) as
+  (select min(case when sp2.sp_seq=1 then null else sl_seatleft end),
+  sp2.sp_stationid,t_trainid,sl_seattype
+    from
+      stop as sp1, stop as sp2, seatleft, train
+    where 
+      sp1.sp_trainid = sp2.sp_trainid and
+      sp2.sp_trainid = t_trainid and
+      t_trainno = 'T8' and
+      sp1.sp_stationid = sl_stationid and
+      sl_day = '2021-05-27' and
+      sl_trainid = t_trainid and
+      (sp1.sp_seq<sp2.sp_seq or sp2.sp_seq=1)
+    group BY
+      sp2.sp_stationid,t_trainid,sl_seattype
+    )
+SELECT 
+  sp_seq, s_name, sp_arrivetime,sp_departtime, sp_count,
+  max(t1_seatleft) filter(where t1_seattype='硬座') as yz,
+  max(t1_seatleft) filter(where t1_seattype='软座') as rz,
+  max(t1_seatleft) filter(where t1_seattype='硬卧上') as yws,
+  max(t1_seatleft) filter(where t1_seattype='硬卧中') as ywz,
+  max(t1_seatleft) filter(where t1_seattype='硬卧下') as ywx,
+  max(t1_seatleft) filter(where t1_seattype='软卧上') as rws,
+  max(t1_seatleft) filter(where t1_seattype='软卧下') as rwx,
+  max(p_price) filter(where t1_seattype='硬座') as yz,
+  max(p_price) filter(where t1_seattype='软座') as rz,
+  max(p_price) filter(where t1_seattype='硬卧上') as yws,
+  max(p_price) filter(where t1_seattype='硬卧中') as ywz,
+  max(p_price) filter(where t1_seattype='硬卧下') as ywx,
+  max(p_price) filter(where t1_seattype='软卧上') as rws,
+  max(p_price) filter(where t1_seattype='软卧下') as rwx
+FROM
+  station,price,stop,t1
+WHERE
+  t1_stationid = p_stationid and 
+  s_stationid = t1_stationid and
+  p_trainid = t1_trainid and
+  sp_trainid = t1_trainid and
+  sp_stationid = t1_stationid and 
+  t1_seattype = p_seattype 
+GROUP BY 
+  sp_seq, s_name, t1_stationid,sp_arrivetime,sp_departtime, sp_count
+ORDER BY
+  sp_count, sp_departtime;
+
+--根据车站名、车次号、日期、座位类型查余票
+  SELECT
+    min(sl_seatleft) as seatleft
+FROM
+    train,
+    seatleft,
+    station as S1,
+    station as S2,
+    stop as SP1,
+    stop as SP2,
+    stop as SP3,
+    runday
+WHERE
+    sl_seattype='0' and
+    S1.s_name='北京南' and
+    S2.s_name='上海虹桥' and
+    t_trainno='G1' and
+    t_trainid=sl_trainid and
+    SP1.sp_stationid=S1.s_stationid and
+    SP3.sp_stationid=S2.s_stationid and
+    (
+    (
+     SP1.sp_arrivetime>SP1.sp_departtime and
+     sl_day='2020.10.1'-SP1.sp_count-1
+    )or
+    (
+     SP1.sp_arrivetime<=SP1.sp_departtime and
+     sl_day='2020.10.1'-SP1.sp_count
+    )
+    )and
+    sl_day=r_day and
+    SP1.sp_trainid=SP3.sp_trainid and
+    sl_trainid=SP1.sp_trainid and
+    SP1.sp_trainid=SP2.sp_trainid and
+    sl_stationid=SP2.sp_stationid and
+    (
+        SP2.sp_count>SP1.sp_count
+        or
+        (
+            SP2.sp_count=SP1.sp_count and
+            SP1.sp_arrivetime<=SP2.sp_arrivetime
+        )
+    )and
+    (
+        SP3.sp_count>SP2.sp_count
+        or
+        (
+            SP3.sp_count=SP2.sp_count and
+            SP2.sp_arrivetime<SP3.sp_arrivetime
+        )
+    );
+--生成订单
+  INSERT INTO
+    orders(
+        o_orderid,
+        o_userid,
+        o_trainid,
+        o_status,
+        o_price,
+        o_departtime,
+        o_arrivetime,
+        o_travelday,
+        o_departstation,
+        o_arrivestation,
+        o_seattype
+    )
+SELECT
+    (case when O1.orderid is null then 1 else O1.orderid+1 end),
+    1,
+    t_trainid,
+    '1',
+    P2.p_price-P1.p_price as price,
+    SP1.sp_departtime,
+    SP2.sp_arrivetime,
+    '2020.10.1',
+    SP1.sp_stationid,
+    SP2.sp_stationid,
+    P1.p_seattype
+FROM
+    (
+        SELECT 
+            max(o_orderid) as orderid
+        FROM
+            orders
+    ) as O1,
+    train,
+    price as P1,
+    price as P2,
+    stop as SP1,
+    stop as SP2,
+    station as S1,
+    station as S2
+WHERE
+    t_trainno='G1' and
+    S1.s_name='北京南' and
+    S2.s_name='上海虹桥' and
+    S1.s_stationid=SP1.sp_stationid and
+    S2.s_stationid=SP2.sp_stationid and
+    t_trainid=SP1.sp_trainid and
+    t_trainid=SP2.sp_trainid and
+    P1.p_seattype='0' and
+    P2.p_seattype=P1.p_seattype and
+    P1.p_trainid=P2.p_trainid and
+    P1.p_trainid=t_trainid and
+    S1.s_stationid=P1.p_stationid and
+    S2.s_stationid=P2.p_stationid;
