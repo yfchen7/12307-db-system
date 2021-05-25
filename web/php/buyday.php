@@ -8,7 +8,7 @@ include_once("utils.php");
     <div class="center w">
       <?php 
         buyday();
-        ret_botton();
+        ret_button();
       ?>
     </div>    
     <?php require_once '../footer.php'?>

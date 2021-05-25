@@ -14,7 +14,21 @@
           <li><label>始发日期：</label><input type="date"name="day"id="day" required="required">
           <span class="small"></span></li>
         </ul>
-        <input type="submit"value="查询"name="querytrain"class="botton">
+        <input type="submit"value="查询"name="querytrain" class="botton">
+        </form>
+        <h4>按地点查询</h4>
+        <form action="php/query.php" method="get" accept-charset="utf-8" class="form">
+        <ul>
+          <li><label>出发地：</label><input type="text"name="scity"required="required"maxlength=20>
+          <span class="small"></span></li>
+          <li><label>到达地：</label><input type="text"name="ecity"required="required"maxlength=20>
+          <span class="small"></span></li>
+          <li><label>出发日期：</label><input type="date"name="sday"id="sday" required="required">
+          <span class="small"></span></li>
+          <li><label>出发时间：</label><input type="time"name="stime"id="stime" value="00:00" required="required">
+          <span class="small"></span></li>
+        </ul>
+        <input type="submit"value="查询"name="querycity" class="botton">
         </form>
 		  </span>
     </div>
@@ -22,6 +36,7 @@
     <script>
       var tomorrow = new Date(new Date().getTime()+(24+8)*60*60*1000);
       document.getElementById('day').valueAsDate = tomorrow;
+      document.getElementById('sday').valueAsDate = tomorrow;
     </script>
     <?php require_once 'footer.php'?>
   </body>

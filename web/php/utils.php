@@ -11,13 +11,20 @@
 	    if(!$ret) die(pg_last_error());
         return $ret;
     }
-    function ret_botton($str="返回")
+    function ret_button($str="返回")
     {
         echo "<br><button onclick=\"history.go(-1)\">$str</button>";
     }
     function check_access($str)
     {
         if (!isset($_POST[$str])) {
+            echo "<script>alert('没有权限访问');history.go(-1);</script>";
+            exit();
+        }
+    }
+    function check_get($str)
+    {
+        if (!isset($_GET[$str])) {
             echo "<script>alert('没有权限访问');history.go(-1);</script>";
             exit();
         }

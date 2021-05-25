@@ -13,32 +13,32 @@ create table train   (t_trainid     integer primary key,
                     );                    
 create table runday  (r_day           Date primary key
                       );
-create table stop    (sp_stationid      integer not null,
-                      sp_trainid        integer not null,
+create table stop    (sp_trainid        integer not null,
+                      sp_stationid      integer not null,   
                       sp_arrivetime     time,
                       sp_departtime     time,
                       sp_count          integer not null,
                       sp_seq            integer not null,
-                      primary key (sp_stationid , sp_trainid),
+                      primary key (sp_trainid,sp_stationid),
                       foreign key (sp_stationid) references station(s_stationid),
                       foreign key (sp_trainid) references train(t_trainid)
                     );
-create table price   (p_stationid  integer not null,
-                      p_trainid    integer not null,
+create table price   (p_trainid    integer not null,
+                      p_stationid  integer not null,
                       p_seattype   seattype,
                       p_price      decimal(15,2) not null,
-                      primary key (p_stationid , p_trainid, p_seattype),
+                      primary key (p_trainid, p_stationid, p_seattype),
                       foreign key (p_stationid) references station(s_stationid),
                       foreign key (p_trainid) references train(t_trainid)
                       --foreign key (p_trainid , p_seattype) references seat(se_trainid , se_seattype)
                       );
 
-create table seatleft (sl_stationid      integer not null,
+create table seatleft (sl_day            Date,
                        sl_trainid        integer not null,
-                       sl_day            Date,
-                       sl_seattype       seattype,
+                       sl_stationid      integer not null,    
+                       sl_seattype       seattype,             
                        sl_seatleft       integer not null,
-                       primary key (sl_stationid , sl_day , sl_trainid , sl_seattype),
+                       primary key (sl_day,sl_trainid,sl_stationid,sl_seattype),
                        foreign key (sl_stationid) references station(s_stationid),
                        foreign key (sl_trainid) references train(t_trainid),
                        foreign key (sl_day) references runday(r_day)

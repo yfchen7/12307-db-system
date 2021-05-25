@@ -2,6 +2,7 @@
     width: 1200px;
     margin: auto;
     color:brown;
+
 }
 body{
     background-color:white;
@@ -98,6 +99,7 @@ a{
     margin-right: 8px;
     border:1px solid #ccc;
 }
+
 .botton{
     width: 133px;
     height: 24px;
@@ -133,6 +135,7 @@ a{
 .default-table tr:nth-child(even){background-color: #f2f2f2;}
 
 .default-table tr:hover {background-color: #ddd;}
+
 
 .default-table th {
     font-weight:500;
