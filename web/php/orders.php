@@ -21,7 +21,7 @@ function show_orders()
 {
   $conn = mypg_connect();
   $userid = "";
-  if($_SESSION['usr'][1]!='admin' and isset($_GET['userid']))
+  if($_SESSION['usr'][1]=='admin' and isset($_GET['userid']))
     $userid = $_GET['userid'];
   else $userid = $_SESSION['usr'][0];
   echo "{$_GET['userid']}<br>";

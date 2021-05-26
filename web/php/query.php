@@ -310,8 +310,7 @@ function querytrans()
 	$sday = $_GET['sday'];
   $stime = $_GET['stime'];
 	$conn = mypg_connect();
-  $sql = "
-  -- 第一步选出所有的换成可能
+  $sql = <<<EOF
 with transfer_table (
     day1, day2,
     s1c, s2c, s3c, s4c,
@@ -361,20 +360,17 @@ with transfer_table (
         runday as R1,
         runday as R2
     WHERE
-        -- A start
-        C1.c_name='北京' and
+        C1.c_name='$scity' and
         S1.s_cityid=C1.c_cityid and
-        -- B end
-        C3.c_name='黄州' and
+        C3.c_name='$ecity' and
         S4.s_cityid=C3.c_cityid and
-        -- C transfer
         S2.s_cityid = C2.c_cityid and
         S3.s_cityid = C2.c_cityid and
         SP1.sp_stationid=S1.s_stationid and
         SP2.sp_stationid=S2.s_stationid and
         SP3.sp_stationid=S3.s_stationid and
         SP4.sp_stationid=S4.s_stationid and
-        SP1.sp_departtime>'00:00:00' and
+        SP1.sp_departtime>'$stime' and
         SP1.sp_trainid=T1.t_trainid and
         SP2.sp_trainid=T1.t_trainid and
         SP3.sp_trainid = T2.t_trainid and
@@ -393,17 +389,16 @@ with transfer_table (
             or
             (
                 SP4.sp_count=SP3.sp_count and
-                SP3.sp_arrivetime<SP4.sp_arrivetime
+                SP3.sp_arrivetime < SP4.sp_arrivetime
             )
         )and
-        -- date
         (
             (
-                R1.r_day + SP1.sp_count = '2021.5.27' and
+                R1.r_day + SP1.sp_count = '$sday' and
                 SP1.sp_arrivetime <= SP1.sp_departtime 
             )or(
                 SP1.sp_arrivetime > SP1.sp_departtime and
-                R1.r_day + SP1.sp_count + 1 = '2021.5.27'
+                R1.r_day + SP1.sp_count + 1 = '$sday'
             )
         )
         and
@@ -433,7 +428,6 @@ with transfer_table (
         T1.t_trainid, 
         T2.t_trainid
     ),
--- 第二步计算换乘的总价格，选取前100个
  tmp(
     day1, day2, c1,c2,c3,c4,
     seq1,seq2,seq3,seq4,
@@ -493,7 +487,6 @@ ORDER BY
     price
 LIMIT 100
 ),
--- 第三步查询该100次换乘是否有余票，计算总时间
 final(
     total_price,d1,d2,
     s1,s2,t1,
@@ -510,7 +503,7 @@ SELECT
     S2.s_name as station2,
     T1.t_trainno as train1,
     tmp.at1 as arrivetime1,
-    to_date('2021.5.27', 'yyyy-MM-dd') + tmp.dt1 as departtime1,
+    to_date('$sday', 'yyyy-MM-dd') + tmp.dt1 as departtime1,
     tmp.day1 + tmp.c2 + tmp.at2 as arrivetime2,
     tmp.seat1 as seattype1,
     tmp.p1 as price1,
@@ -580,7 +573,6 @@ GROUP BY
 ORDER BY
     price
 ),
--- 第四步对上面的100个组合进一步查询两次换乘车辆的详细信息
 LT(
     s1,s2,t1,seat1,dt1,at2,sl1,s3,s4,t2,seat2,dt3,at4,sl2,p1,p2,price,total_time
 )as
@@ -683,7 +675,6 @@ GROUP BY
 ORDER BY
     price
 )
--- 对详细信息进行归并（座位信息变为多列），选出最终的10个车辆、经停站站点组合
 SELECT
     LT.t1,
     LT.s1,
@@ -745,7 +736,9 @@ ORDER BY
 LIMIT
     10
 ;
-  ";
+EOF;
+  echo "$sql";
+  exit();
   $ret = mypg_query($conn,$sql);
   $row=pg_fetch_row($ret);
   echo "<h4>$scity-$ecity 的连续查询结果</h4>出发日期: $sday<br>";
@@ -762,18 +755,26 @@ LIMIT
   <th>硬座</th><th>软座</th><th>硬卧上</th><th>硬卧中</th><th>硬卧下</th><th>软卧上</th><th>软卧下</th>
   <th>最低价格</th></tr>";
   while($row){
+    $id = 1;
     echo "<tr>"; 
     $row[0] = trim($row[0]);
+    $row[19] = trim($row[19]);
     $count = intval(date("d",strtotime($row[4])))-intval(date("d",strtotime($row[3])));
     $count1 = intval(date("d",strtotime($row[23])))-intval(date("d",strtotime($row[22])));
     $endhour = date("H:i",strtotime($row[4]));
     $endhour1 = date("H:i",strtotime($row[23]));
     $row[3] = date("H:i",strtotime($row[3]));
     $row[4] = $endhour;
+    $row[22] = date("H:i",strtotime($row[22]));
+    $row[23] = $endhour1;
     if($count>0) $row[4] = $row[4]."<br>+{$count}天";
+    if($count1>0) $row[23] = $row[23]."<br>+{$count1}天";
+    echo "<td rowspan=\"2\">$id</td>"; $id++;
     for ($i=0;$i<sizeof($row);$i++){
+      if($i==19) echo "</tr><tr>";
       if(!isset($row[$i])) echo "<td>-</td>";
-      else if($i>=13) echo "<td>¥$row[$i]</td>";
+      else if($i>=12 and $i<=18 or $i>=31 or $i<=37) echo "<td>¥$row[$i]</td>";
+      /*
       else if($i>=6 and $i<=12 and $row[$i]>0) {
         $j = $i+7; 
         $seattype = $i-6;
@@ -783,6 +784,8 @@ LIMIT
 EOF;
         echo "$str";
       }
+      */
+      else if($i>=38) echo "<td rowspan=\"2\">$row[$i]</td>";
       else echo "<td>$row[$i]</td>";
     }
     $row=pg_fetch_row($ret);
