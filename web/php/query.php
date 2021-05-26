@@ -135,7 +135,7 @@ ORDER BY
   $row=pg_fetch_row($ret);
   if(empty($row)){
     echo "没有找到<br>您可以";
-    echo "<a href=/php/buyday.php>查看所有开放购票日期</a>";
+    echo "<a href=/php/buyday.php>查看所有发车日期</a>";
     return;
   }
   echo "<p class='small'>注：余票为从始发站到当前站的余票，点击余票的数字可以进入购买页面</p>";
@@ -315,7 +315,7 @@ limit 10;
   echo "<h4>$scity-$ecity 的查询结果</h4>出发日期: $sday<br>";
   if(empty($row)){
     echo "没有找到<br>您可以";
-    echo "<a href=/php/buyday.php>查看所有开放购票日期</a>";
+    echo "<a href=/php/buyday.php>查看所有发车日期</a>";
     return;
   }
   echo "<p class='small'>注：点击余票的数字可以进入购买页面</p>";
@@ -498,7 +498,7 @@ function querytrans()
           T1.t_trainid, 
           T2.t_trainid
       ),
-  -- 第二步计算换乘的总价格，选取前100个
+  -- 第二步计算换乘的总价格
    tmp(
       day1, day2, c1,c2,c3,c4,
       seq1,seq2,seq3,seq4,
@@ -558,7 +558,7 @@ function querytrans()
       price
   LIMIT 160
   ),
-  -- 第三步查询该100次换乘是否有余票，计算总时间
+  -- 第三步查询是否有余票，计算总时间
   final(
       total_price,d1,d2,
       s1,s2,t1,
@@ -677,7 +677,7 @@ function querytrans()
       price
   LIMIT 10
   ),
-  -- 第四步对上面的100个组合进一步查询两次换乘车辆的详细信息
+  -- 第四步对上面的组合进一步查询两次换乘车辆的详细信息
   LT(
       s1,s2,t1,seat1,dt1,at2,sl1,s3,s4,t2,seat2,dt3,at4,sl2,p1,p2,price,total_time
   )as
@@ -855,7 +855,7 @@ EOF;
   echo "<h4>$scity-$ecity 的连续查询结果</h4>出发日期: $sday<br>";
   if(empty($row)){
     echo "没有找到<br>您可以";
-    echo "<a href=/php/buyday.php>查看所有开放购票日期</a>";
+    echo "<a href=/php/buyday.php>查看所有发车日期</a>";
     return;
   }
   echo "<p class='small'>注：选择座位类型后点确定可以进入购买页面</p>";
@@ -869,8 +869,15 @@ EOF;
   $id = 0;
   while($row){
     echo "<tr>"; 
+    $total_tmp = strtotime("$row[20]",'1970-01-01');
+    $total_day = intval(date("d",$total_tmp))-1;
+    $total_hour = date("H时i分",$total_tmp);
+    $row[20] = $total_hour;
+    if($total_day>0) $row[20] = "{$total_day}天".$row[20];
+
     $row[0] = trim($row[0]);
     $row[21] = trim($row[21]);
+    
     $count = intval(date("d",strtotime($row[4])))-intval(date("d",strtotime($row[3])));
     $count1 = intval(date("d",strtotime($row[25])))-intval(date("d",strtotime($row[24])));
     $endhour = date("H:i",strtotime($row[4]));

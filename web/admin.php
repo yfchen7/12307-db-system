@@ -19,7 +19,7 @@
           <span id="wait"></span>
         </form>
         <form action="php/admin.php" method="get">
-          <br><input type="submit"value="查看所有可购票日期"name="buyday">
+          <br><input type="submit"value="查看所有可购票的发车日期"name="buyday">
         </form>
         <h4>热点车次</h4>
         <form action="php/admin.php" method="get" accept-charset="utf-8" class="form">

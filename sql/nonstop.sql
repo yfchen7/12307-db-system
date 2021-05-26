@@ -1,10 +1,14 @@
-  SELECT
+SELECT
   t_trainno,
   S1.s_name,--始发站
   S2.s_name,--终点站
-  SL.departtime,--从始发站离开时间
-  SL.arrivetime,--到达终点站时间
-  (to_date('1970-01-01','yyyy-MM-dd')+SL.count2-SL.count1+SL.arrivetime-SL.departtime) as total_time,
+  to_timestamp('$sday','yyyy-MM-dd')+SL.departtime,--从出发站离开日期时间
+  SL.slday + SL.count2 + SL.arrivetime,
+  (case when SL.departtime>=SL.arrivetime0
+        then to_date('2020-9-1','yyyy-MM-dd')+SL.count2-SL.count1+SL.arrivetime-SL.departtime-to_timestamp('2020-9-1 00:00:00','yyyy-MM-dd hh24:mi:ss')
+        else to_date('2020-9-1','yyyy-MM-dd')+SL.count2-SL.count1-1+SL.arrivetime-SL.departtime-to_timestamp('2020-9-1 00:00:00','yyyy-MM-dd hh24:mi:ss')
+        end) 
+    as total_time, 
   max(SL.seatleft) filter(where SL.seattype='硬座') as yz_left,
   max(SL.seatleft) filter(where SL.seattype='软座') as rz_left,
   max(SL.seatleft) filter(where SL.seattype='硬卧上') as yws_left,
@@ -34,9 +38,11 @@ FROM
           sl_seattype as seattype,
           min(sl_seatleft) as seatleft,
           ST1.sp_departtime as departtime,
+          ST1.sp_arrivetime as arrivetime0,
           ST3.sp_arrivetime as arrivetime,
           ST1.sp_count as count1,
-          ST3.sp_count as count2
+          ST3.sp_count as count2,
+          sl_day as slday
       FROM
           seatleft,
           stop as ST1,
@@ -47,18 +53,29 @@ FROM
           station as SI1,
           station as SI2
       WHERE
-          CI1.c_name='北京' and
-          CI2.c_name='上海' and
+          CI1.c_name='$scity' and
+          CI2.c_name='$ecity' and
           CI1.c_cityid=SI1.s_cityid and
           CI2.c_cityid=SI2.s_cityid and
           ST1.sp_stationid=SI1.s_stationid and
           ST3.sp_stationid=SI2.s_stationid and
-          sl_day+ST1.sp_count='2021-05-27' and
           ST1.sp_trainid=ST3.sp_trainid and
           ST2.sp_trainid = ST3.sp_trainid and
-          ST1.sp_departtime >= '09:00' and
+          ST1.sp_departtime >= '$stime' and
           sl_trainid=ST1.sp_trainid and
           sl_stationid=ST2.sp_stationid and
+          (
+            (
+              ST1.sp_departtime>=ST1.sp_arrivetime and
+              '$sday'=ST1.sp_count+sl_day
+            )
+              or
+            (
+              ST1.sp_departtime<ST1.sp_arrivetime and
+              '$sday'=ST1.sp_count+sl_day+1
+            )
+          )
+          and 
           (
               ST2.sp_count>ST1.sp_count
               or
@@ -81,9 +98,11 @@ FROM
           trainid,
           seattype,
           departtime,
+          arrivetime0,
           arrivetime,
           count1,
-          count2
+          count2,
+          slday
   )as SL
 WHERE 
   S1.s_stationid=SL.departstation and
@@ -100,9 +119,11 @@ GROUP BY
   S2.s_name,--终点站
   t_trainno,
   SL.departtime,--从始发站离开时间
+  SL.arrivetime0,
   SL.arrivetime,--到达终点站时间
   SL.count1,
-  SL.count2
+  SL.count2,
+  SL.slday
 ORDER BY
-   price;
-  
+   price,total_time,SL.departtime
+limit 10;

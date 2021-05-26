@@ -10,7 +10,7 @@ include_once("utils.php");
       <?php 
         gen_order();
         //gen_usrinfo();
-        ret_button("取消");
+        ret_index();
       ?>
     </div>    
     <?php require_once '../footer.php'?>
@@ -60,7 +60,7 @@ function gen_ticketinfo($trainno,$sname,$sday,$stime,$ename,$eday,$etime,$seatty
   echo "$trainno 号<br>
     $sday $stime - $eday $etime <br>
     $sname - $ename <br>
-    $seattype ¥$price<br>
+    $seattype ¥$price<br><br>
   ";
 }
 
@@ -98,6 +98,11 @@ function confirm_button($trainno,$sname,$sday,$ename,$seattype)
   onclick=httpPost('buy.php',{"trainno":"$trainno","sname":"$sname","sday":"$sday","ename":"$ename","seattype":"$seattype"})>
   确认购买</button></div>
 EOF;
+}
+
+function ret_index()
+{
+    echo "<br><br><button onclick=\"location='/index.php'\">取消</button>";
 }
 
 ?>

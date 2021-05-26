@@ -1,0 +1,7 @@
+
+copy city from '/home/alphabet/db/12307-db-system/data/process/city.csv' with (format csv, delimiter ',');
+copy train from '/home/alphabet/db/12307-db-system/data/process/train.csv' with (format csv, delimiter ',');
+copy station from '/home/alphabet/db/12307-db-system/data/process/station.csv' with (format csv, delimiter ',');
+copy stop from '/home/alphabet/db/12307-db-system/data/process/stop.csv' with (format csv, delimiter ',');
+copy price from '/home/alphabet/db/12307-db-system/data/process/price.csv' with (format csv, delimiter ',');
+copy seat from '/home/alphabet/db/12307-db-system/data/process/seat.csv' with (format csv, delimiter ',');
