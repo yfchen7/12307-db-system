@@ -268,10 +268,10 @@ ORDER BY
   while($row){
     echo "<tr>"; 
     $row[0] = trim($row[0]);
+    $count = intval(date("d",strtotime($row[4])))-intval(date("d",strtotime($row[3])));
     $endhour = date("H:i",strtotime($row[4]));
     $row[3] = date("H:i",strtotime($row[3]));
     $row[4] = $endhour;
-    $count = intval(date("d",strtotime($row[5],"1970-01-01")))-1;
     if($count>0) $row[4] = $row[4]."<br>+{$count}天";
     for ($i=0;$i<sizeof($row);$i++){
       if(!isset($row[$i])) echo "<td>-</td>";
@@ -756,17 +756,20 @@ LIMIT
   }
   echo "<p class='small'>注：选择座位类型后点确定可以进入购买页面</p>";
   echo "<table class=\"default-table\"border=\"1\">";
-  echo "<tr><th>车次</th><th>出发站</th><th>到达站</th><th>出发时间</th><th>到达时间</th><th>总耗时</th>
+  echo "<tr><th>序号</th>
+  <th>车次</th><th>出发站</th><th>到达站</th><th>出发时间</th><th>到达时间</th>
   <th>硬座</th><th>软座</th><th>硬卧上</th><th>硬卧中</th><th>硬卧下</th><th>软卧上</th><th>软卧下</th>
   <th>硬座</th><th>软座</th><th>硬卧上</th><th>硬卧中</th><th>硬卧下</th><th>软卧上</th><th>软卧下</th>
   <th>最低价格</th></tr>";
   while($row){
     echo "<tr>"; 
     $row[0] = trim($row[0]);
+    $count = intval(date("d",strtotime($row[4])))-intval(date("d",strtotime($row[3])));
+    $count1 = intval(date("d",strtotime($row[23])))-intval(date("d",strtotime($row[22])));
     $endhour = date("H:i",strtotime($row[4]));
+    $endhour1 = date("H:i",strtotime($row[23]));
     $row[3] = date("H:i",strtotime($row[3]));
     $row[4] = $endhour;
-    $count = intval(date("d",strtotime($row[5],"1970-01-01")))-1;
     if($count>0) $row[4] = $row[4]."<br>+{$count}天";
     for ($i=0;$i<sizeof($row);$i++){
       if(!isset($row[$i])) echo "<td>-</td>";
