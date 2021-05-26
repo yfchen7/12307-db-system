@@ -4,15 +4,18 @@
   <body>
     <?php require_once 'nav.php'?>
     <div class="center w">
-        welcome to 12307 book system
-        <button onclick ="location='php/orders.php?userid=1'")>test</button>
+        <h3>欢迎使用12307订票系统</h3>
         <?php 
             if(isset($_SESSION['usr'])){
-              echo "欢迎您，{$_SESSION['usr'][1]}<br>";
+              echo "欢迎您，{$_SESSION['usr'][4]}<br><br>";
               if($_SESSION['usr'][1]=='admin')
-                echo "<a href=\"./admin.php\">管理入口</a>";
+                echo "<button onclick =\"location='./admin.php'\">管理入口</button><br>";
+              //else 
+                //echo "<img src=\"/images/baoxian1.png\">";
             }
+            //else echo "<img src=\"/images/baoxian1.png\">";
         ?>
+        <br><br><br><br><br><br><br><br><br><br><br><br>
     </div>
     
     <?php require_once 'footer.php'?>

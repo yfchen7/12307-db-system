@@ -59,12 +59,10 @@ WHERE
     SP2.sp_stationid=o_arrivestation and
     S1.s_stationid=o_departstation and
     S2.s_stationid=o_arrivestation
-order by
-  departtime
     ;";
 	$ret = mypg_query($conn,$sql);
   $row=pg_fetch_row($ret);
-  echo "{$_SESSION['usr'][1]}的订单信息<br><br>";
+  echo "{$_SESSION['usr'][4]}的订单信息<br><br>";
   echo "<table class=\"default-table\"border=\"1\">";
   echo "<tr><th>订单号</th><th>车次</th><th>出发站</th><th>到达站</th><th>出发时间</th><th>到达时间</th>
   <th>座位类型</th><th>总票价</th><th>状态</th><th>&nbsp;&nbsp;&nbsp;</th>

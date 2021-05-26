@@ -21,9 +21,9 @@
           <li><label>手机号：</label><input type="number"name="phone"required="required"maxlength=11>
           <span class="small">*11位数字</span></li>
           <li><label>用户名：</label><input type="text"name="username"required="required"maxlength=20>
-          <span class="small">*1-20位字符</span></li>
+          <span class="small">*1-20字符</span></li>
           <li><label>真实姓名：</label><input type="text"name="realname"required="required"maxlength=20>
-          <span class="small">*1-20位字符</span></li>
+          <span class="small">*1-10个汉字</span></li>
           <li><label>身份证号：</label><input type="text"name="realid"required="required"maxlength=18>
           <span class="small">*18位数字或X</span></li>
           <li><label>信用卡号：</label><input type="number"name="ccard"required="required"maxlength=16>

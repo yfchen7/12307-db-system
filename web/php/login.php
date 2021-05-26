@@ -10,7 +10,7 @@ function checkPasswd()
 	$username = $_POST['username'];
 	//if(!preg_match("/^\d{11}$/",$phone)) {$err = '手机号格式有误'; goto FAIL;}
 	$password = $_POST['password'];
-	$passwdhash = $password;
+	$passwdhash = md5($password);
 
 	$conn = mypg_connect();
 	$sql = "select  * from usr where u_username='$username' and u_passwdhash='$passwdhash' limit 1;";

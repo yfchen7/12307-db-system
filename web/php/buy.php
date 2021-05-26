@@ -10,6 +10,7 @@ do_book();
 function do_book()
 {
 	//$err = '信息有误，购买失败';	
+  //TODO : check format of post value for safety
 	$trainno = $_POST['trainno'];
   $sname = $_POST['sname'];
   $sday = $_POST['sday'];
@@ -17,14 +18,29 @@ function do_book()
   $seattype = $_POST['seattype'];
   $userid = $_SESSION['usr'][0];
 	$conn = mypg_connect();
-  if(check_sl($conn,$sday,$trainno,$sname,$ename,$seattype) 
-    and update_sl($conn,$sday,$trainno, $sname,$ename,$seattype)
-    and gen_orders($conn,$userid, $sday,$trainno, $sname,$ename,$seattype)
-    
-  ) echo "<script>alert('购买成功');location.href = '../orders.php'</script>";
-  else{
-    "<script>alert('余票不足');history.go(-2);</script>";
+  if(isset($_POST['trainno1'])){
+    $trainno1 = $_POST['trainno1'];
+    $sname1 = $_POST['sname1'];
+    $sday1 = $_POST['sday1'];
+    $ename1 = $_POST['ename1'];
+    $seattype1 = $_POST['seattype1'];
   }
+  if(!check_sl($conn,$sday,$trainno,$sname,$ename,$seattype))
+    goto FAIL;
+  else{
+    update_sl($conn,$sday,$trainno, $sname,$ename,$seattype);
+    gen_orders($conn,$userid, $sday,$trainno, $sname,$ename,$seattype);
+  }
+  if(isset($_POST['trainno1'])){
+    if(!check_sl($conn,$sday1,$trainno1,$sname1,$ename1,$seattype1)) goto FAIL;
+    update_sl($conn,$sday1,$trainno1, $sname1,$ename1,$seattype1);
+    gen_orders($conn,$userid, $sday1,$trainno1, $sname1,$ename1,$seattype1);
+  }  
+  echo "<script>alert('购买成功');location.href = '../orders.php'</script>";
+  exit();
+
+FAIL:
+  echo "<script>alert('余票不足');history.go(-2);</script>";
   exit();
 }
 

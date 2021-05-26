@@ -53,6 +53,6 @@ function setTotal()
   $row = pg_fetch_row($ret);
   $totalprice = empty($row[0]) ? 0 : $row[0];
   echo "<script>document.getElementById(\"totalorder\").innerHTML={$totalorder};</script>";
-  echo "<script>document.getElementById(\"totalprice\").innerHTML=¥{$totalprice};</script>";
+  echo "<script>document.getElementById(\"totalprice\").innerHTML='¥{$totalprice}';</script>";
 }
 ?>

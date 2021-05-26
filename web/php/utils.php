@@ -13,7 +13,7 @@
     }
     function ret_button($str="返回")
     {
-        echo "<br><button onclick=\"history.go(-1)\">$str</button>";
+        echo "<br><br><button onclick=\"history.go(-1)\">$str</button>";
     }
     function check_access($str)
     {
@@ -28,6 +28,13 @@
             echo "<script>alert('没有权限访问');history.go(-1);</script>";
             exit();
         }
+    }
+
+    function fails($str='')
+    {
+        if(empty($str)) $str="错误的请求";
+        echo "<script>alert('$str');history.go(-1);</script>";
+        exit();
     }
 
     if(!isset($_SESSION)) {

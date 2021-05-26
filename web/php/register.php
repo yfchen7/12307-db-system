@@ -19,9 +19,9 @@ function checkRegister()
     if(!preg_match("/^\d{17}[\dxX]$/",$realid)) {$err = '身份证号格式有误'; goto FAIL;}
     if(!preg_match("/^[\x{4e00}-\x{9fa5}]{1,10}$/u",$realname) and 
         !preg_match("/^[a-zA-Z ]{1,20}$/",$realname)) {$err = '姓名格式有误'; goto FAIL;}
-    if(!preg_match("/^\w{1,20}$/",$username)) {$err = '用户名格式有误'; goto FAIL;}
+    if(!preg_match("/^.{1,20}$/",$username)) {$err = '用户名格式有误'; goto FAIL;}
     if(!preg_match("/^.{1,20}$/",$password)) {$err = '密码格式有误'; goto FAIL;}
-	$passwdhash = $password;
+	$passwdhash = md5($password);
 
     $conn = mypg_connect();
     $sql = "
