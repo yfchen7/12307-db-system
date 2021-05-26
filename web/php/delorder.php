@@ -11,6 +11,13 @@ function delorder()
   $conn = mypg_connect();
   if($_SESSION['usr'][1]!='admin')
     checkoid($conn,$orderid,$uid);
+    $sql = "select count(*) from orders where o_orderid=$orderid and o_status='有效'";
+    $ret = mypg_query($conn,$sql);
+    $row = pg_fetch_row($ret);
+    if($row[0]!=1){
+      echo "<script>alert('订单无效');history.go(-1);</script>";
+      exit();
+    }
   $sql = "
 UPDATE
   orders
@@ -72,7 +79,7 @@ WHERE
     );
   ";
   $ret = mypg_query($conn,$sql);
-  echo "<script>alert('订单已取消');location.href = '../index.php'</script>";
+  echo "<script>alert('订单已取消');history.go(-1);</script>";
   exit();
 }
 

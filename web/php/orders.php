@@ -74,11 +74,11 @@ order by
     for ($i=0;$i<sizeof($row);$i++){
       echo "<td>$row[$i]</td>";
     }
-    $str =<<<EOF
-    <td>
-    <button onclick=httpPost('delorder.php',{"orderid":"$row[0]"})>取消订单</button></td>
+    if($row[8]=='有效')
+    echo<<<EOF
+    <td><button onclick=httpPost('delorder.php',{"orderid":"$row[0]"})>取消订单</button></td>
 EOF;
-    echo "$str";
+    else echo "<td></td>";
     $row=pg_fetch_row($ret);
     echo"</tr>";
   }

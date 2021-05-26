@@ -51,14 +51,14 @@ FROM
   train,
   orders
 WHERE
-  t_trainid=o_trainid
+  t_trainid=o_trainid and o_status='有效'
 group by 
   t_trainno
 order by 
   sum desc limit 10;
 ";
 	$ret = mypg_query($conn,$sql);
-  echo "<table class=\"default-table\"border=\"1\"><tr><th>热点车次</th><th>订单数</th></tr>";
+  echo "<table class=\"default-table\"border=\"1\"><tr><th>热点车次</th><th>有效订单数</th></tr>";
   while($row = pg_fetch_row($ret)){
     echo "<tr><td>$row[0]</td><td>$row[1]</td</tr>";
   }
@@ -84,7 +84,7 @@ function openbuy()
 	$sql = "insert into runday values('$fromday');";
 	$ret = pg_query($conn,$sql);
   if(!$ret) {
-    echo "<script>alert('该日期已经开放购票');history.go(-1);</script>";
+    echo "<script>alert('该日期已经开放过购票');history.go(-1);</script>";
     exit();
   }
   $sql = "

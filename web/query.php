@@ -28,7 +28,9 @@
           <li><label>出发时间：</label><input type="time"name="stime"id="stime" value="00:00" required="required">
           <span class="small"></span></li>
         </ul>
-        <input type="submit"value="查询"name="querycity" class="botton">
+        <input type="submit"value="直达查询"name="querycity" class="botton">
+        <br><br>
+        <input type="submit"value="一次换乘查询"name="querytrans" class="botton">
         </form>
 		  </span>
     </div>
