@@ -21,10 +21,15 @@ function show_orders()
 {
   $conn = mypg_connect();
   $userid = "";
-  if($_SESSION['usr'][1]=='admin' and isset($_GET['userid']))
+  $realname = $_SESSION['usr'][4];
+  if($_SESSION['usr'][1]=='admin' and isset($_GET['userid'])){
     $userid = $_GET['userid'];
+    $sql = "select u_realname from usr where u_userid = $userid";
+    $ret = mypg_query($conn,$sql);
+    $row = pg_fetch_row($ret);
+    $realname = $row[0];
+  }
   else $userid = $_SESSION['usr'][0];
-  echo "{$_GET['userid']}<br>";
   $sday = "1970-01-01";
   $eday = "2070-01-01";
   if(isset($_GET['sday'])) $sday = $_GET['sday'];
@@ -62,7 +67,7 @@ WHERE
     ;";
 	$ret = mypg_query($conn,$sql);
   $row=pg_fetch_row($ret);
-  echo "{$_SESSION['usr'][4]}的订单信息<br><br>";
+  echo "{$realname}的订单信息<br><br>";
   echo "<table class=\"default-table\"border=\"1\">";
   echo "<tr><th>订单号</th><th>车次</th><th>出发站</th><th>到达站</th><th>出发时间</th><th>到达时间</th>
   <th>座位类型</th><th>总票价</th><th>状态</th><th>&nbsp;&nbsp;&nbsp;</th>
