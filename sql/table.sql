@@ -69,8 +69,7 @@ create table orders   (o_orderid       integer primary key,
                       foreign key (o_userid) references usr(u_userid) on delete cascade on update cascade,
                       foreign key (o_trainid) references train(t_trainid),
                       foreign key (o_arrivestation) references station(s_stationid),
-                      foreign key (o_departstation) references station(s_stationid),
-                      foreign key (o_travelday) references runday(r_day)
+                      foreign key (o_departstation) references station(s_stationid)
                       --foreign key (o_trainid , o_travelday) references runday(r_trainid, r_day)
                     );
 

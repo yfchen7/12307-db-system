@@ -13,3 +13,4 @@ copy price from '/home/alphabet/db/12307-db-system/data/process/price.csv' with 
 
 5.在php/utils里把pg_connect里的用户名和密码和数据库名字改成你的。
 6.先注册用户名为admin的即为管理员，先在管理页面开放购票，然后可以买票。
+
