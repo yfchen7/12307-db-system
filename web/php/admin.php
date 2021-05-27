@@ -24,6 +24,7 @@ function alluser()
   $conn = mypg_connect();
 	$sql = "select * from usr order by u_userid;";
 	$ret = mypg_query($conn,$sql);
+  echo "<h4>注册用户列表</h4>";
   echo "<table class=\"default-table\"border=\"1\"><tr>
   <th>id</th><th>用户名</th><th>手机号</th><th>身份证</th><th>真实姓名</th>
   <th>信用卡</th><th></th>
@@ -58,6 +59,7 @@ order by
   sum desc limit 10;
 ";
 	$ret = mypg_query($conn,$sql);
+  echo "<h4>十大热点车次</h4>";
   echo "<table class=\"default-table\"border=\"1\"><tr><th>热点车次</th><th>有效订单数</th></tr>";
   while($row = pg_fetch_row($ret)){
     echo "<tr><td>$row[0]</td><td>$row[1]</td</tr>";

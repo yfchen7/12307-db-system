@@ -1,6 +1,6 @@
 
 <?php
-//为什么这一页代码写得这么烂。因为这是ddl最后一天的凌晨三点，我开始学习javascript和php。
+//
 include_once("utils.php");
  require_once '../header.php'?>
   <body>

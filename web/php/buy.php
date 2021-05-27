@@ -25,16 +25,22 @@ function do_book()
     $ename1 = $_POST['ename1'];
     $seattype1 = $_POST['seattype1'];
   }
+  $istrans = '否';
+
   if(!check_sl($conn,$sday,$trainno,$sname,$ename,$seattype))
     goto FAIL;
-  else{
-    update_sl($conn,$sday,$trainno, $sname,$ename,$seattype);
-    gen_orders($conn,$userid, $sday,$trainno, $sname,$ename,$seattype);
-  }
   if(isset($_POST['trainno1'])){
+    $istrans = '第一次';
     if(!check_sl($conn,$sday1,$trainno1,$sname1,$ename1,$seattype1)) goto FAIL;
+  }
+  
+  update_sl($conn,$sday,$trainno, $sname,$ename,$seattype);
+  gen_orders($conn,$userid, $sday,$trainno, $sname,$ename,$seattype,$istrans);
+  
+  if(isset($_POST['trainno1'])){
+    $istrans = '第二次';
     update_sl($conn,$sday1,$trainno1, $sname1,$ename1,$seattype1);
-    gen_orders($conn,$userid, $sday1,$trainno1, $sname1,$ename1,$seattype1);
+    gen_orders($conn,$userid, $sday1,$trainno1, $sname1,$ename1,$seattype1,$istrans);
   }  
   echo "<script>alert('购买成功');location.href = '../orders.php'</script>";
   exit();
@@ -105,7 +111,7 @@ WHERE
 	return true;
 }
 	
-function gen_orders($conn,$userid, $sday,$trainno, $sname,$ename,$seattype)
+function gen_orders($conn,$userid, $sday,$trainno, $sname,$ename,$seattype,$istrans)
 {  
   $sql = "
   INSERT INTO
@@ -120,7 +126,8 @@ function gen_orders($conn,$userid, $sday,$trainno, $sname,$ename,$seattype)
         o_travelday,
         o_departstation,
         o_arrivestation,
-        o_seattype
+        o_seattype,
+        o_istrans
     )
 SELECT
     (case when O1.orderid is null then 1 else O1.orderid+1 end),
@@ -133,7 +140,8 @@ SELECT
     '$sday',
     SP1.sp_stationid,
     SP2.sp_stationid,
-    P1.p_seattype
+    P1.p_seattype,
+    '$istrans'
 FROM
     (
         SELECT 

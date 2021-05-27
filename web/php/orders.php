@@ -45,6 +45,7 @@ function show_orders()
     (o_travelday+SP2.sp_count-SP1.sp_count+o_arrivetime) as arrivetime, 
     o_seattype,
     o_price+5 as price,
+    o_istrans,
     o_status
 FROM 
     orders,
@@ -64,24 +65,49 @@ WHERE
     SP2.sp_stationid=o_arrivestation and
     S1.s_stationid=o_departstation and
     S2.s_stationid=o_arrivestation
+order by
+  o_orderid
     ;";
 	$ret = mypg_query($conn,$sql);
   $row=pg_fetch_row($ret);
   echo "{$realname}的订单信息<br><br>";
   echo "<table class=\"default-table\"border=\"1\">";
   echo "<tr><th>订单号</th><th>车次</th><th>出发站</th><th>到达站</th><th>出发时间</th><th>到达时间</th>
-  <th>座位类型</th><th>总票价</th><th>状态</th><th>&nbsp;&nbsp;&nbsp;</th>
+  <th>座位类型</th><th>总票价</th><th>是否换乘</th><th>状态</th><th>&nbsp;&nbsp;</th>
   </tr>";
   while($row){
     echo "<tr>"; 
     for ($i=0;$i<sizeof($row);$i++){
-      echo "<td>$row[$i]</td>";
+      if($i>=9 && $row[8]!='否'){
+        if($row[8]=='第一次'){
+          echo "<td rowspan=\"2\">$row[$i]</td>";
+        }
+      }
+      else echo "<td>$row[$i]</td>";
     }
-    if($row[8]=='有效')
-    echo<<<EOF
+    if($row[8]=='第二次')
+      goto NEXT;
+
+
+    if($row[9]=='有效'){
+        if($row[8]=='第一次')
+        echo<<<EOF
+    <td rowspan="2"><button onclick=httpPost('delorder.php',{"orderid":"$row[0]","istrans":"1"})>取消订单</button></td>
+EOF;
+        
+        else  echo<<<EOF
     <td><button onclick=httpPost('delorder.php',{"orderid":"$row[0]"})>取消订单</button></td>
 EOF;
-    else echo "<td></td>";
+    }
+
+    else{
+      if($row[8]=='第一次')
+        echo "<td rowspan=\"2\"></td>";
+      
+      else echo "<td></td>";
+    }
+    
+  NEXT:
     $row=pg_fetch_row($ret);
     echo"</tr>";
   }

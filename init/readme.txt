@@ -12,5 +12,6 @@ copy stop from '/home/alphabet/db/12307-db-system/data/process/stop.csv' with (f
 copy price from '/home/alphabet/db/12307-db-system/data/process/price.csv' with (format csv, delimiter ',');
 
 5.在php/utils里把pg_connect里的用户名和密码和数据库名字改成你的。
-6.先注册用户名为admin的即为管理员，先在管理页面开放购票，然后可以买票。
+6.启动apache2和pgsql服务。
+7.先注册用户名为admin的即为管理员，先在管理页面开放购票，然后可以买票。
 

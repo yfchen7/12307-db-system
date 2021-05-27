@@ -1,5 +1,6 @@
 create type seattype as enum('硬座','软座','硬卧上','硬卧中','硬卧下','软卧上','软卧下');
 create type order_status as enum('有效','已取消');
+create type transtype as enum('否','第一次','第二次');
 create table city    (c_cityid      integer primary key,
                       c_name        varchar(20) unique
                     );   
@@ -66,6 +67,7 @@ create table orders   (o_orderid       integer primary key,
                       o_arrivestation integer not null,
                       o_departstation integer not null,
                       o_seattype      seattype,
+                      o_istrans       transtype,
                       foreign key (o_userid) references usr(u_userid) on delete cascade on update cascade,
                       foreign key (o_trainid) references train(t_trainid),
                       foreign key (o_arrivestation) references station(s_stationid),
@@ -76,8 +78,8 @@ create table orders   (o_orderid       integer primary key,
 
 
 
-create table seat    (se_trainid    integer not null,
-                      se_seattype   seattype,
-                      primary key (se_trainid , se_seattype),
-                      foreign key (se_trainid) references train(t_trainid)
-                    );
+---create table seat    (se_trainid    integer not null,
+---                      se_seattype   seattype,
+---                      primary key (se_trainid , se_seattype),
+---                      foreign key (se_trainid) references train(t_trainid)
+---                    );
