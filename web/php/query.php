@@ -858,7 +858,7 @@ EOF;
     echo "<a href=/php/buyday.php>查看所有发车日期</a>";
     return;
   }
-  echo "<p class='small'>注：选择座位类型后点确定可以进入购买页面</p>";
+  echo "<p class='small'>注：选择座位类型后点预订可以进入购买页面</p>";
   echo "<table class=\"default-table\"border=\"1\">";
   echo "<tr><th>序号</th>
   <th>车次</th><th>出发站</th><th>到达站</th><th>出发时间</th><th>到达时间</th>
@@ -885,10 +885,10 @@ EOF;
     $sday1 = date("Y-m-d",strtotime($row[24]));
     $stime1 = date("H:i",strtotime($row[24]));
     $stime0 = date("H:i",strtotime($row[3]));
-    //$row[3] = date("H:i",strtotime($row[3]));
-    //$row[4] = $endhour;
-    //$row[25] = date("H:i",strtotime($row[24]));
-    //$row[24] = $endhour1;
+    $row[3] = date("Y-m-d H:i",strtotime($row[3]));
+    $row[4] = date("Y-m-d H:i",strtotime($row[4]));
+    $row[24] = date("Y-m-d H:i",strtotime($row[24]));
+    $row[25] = date("Y-m-d H:i",strtotime($row[25]));
     //if($count>0) $row[4] = $row[4]."<br>+{$count}天";
     //if($count1>0) $row[25] = $row[25]."<br>+{$count1}天";
     $id++;
