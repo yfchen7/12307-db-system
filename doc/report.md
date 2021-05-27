@@ -32,7 +32,7 @@
 
 ![ER](./ER.png)
 
-我们设计的实体-联系图中共有6个实体集。4个强实体分别为user：描述用户属性，station：描述车站属性，train：描述列车属性，order：描述订单属性。
+我们设计的实体-联系图中共有6个实体集。5个强实体分别为user：描述用户属性，station：描述车站属性，train：描述列车属性，order：描述订单属性, runday：记录所有列车的始发日期。
 
 seat是一个弱实体，依赖于train而存在，和train一起描述某个列车上各种类型的座位总数。其中se_seattype是部分键，用于决定每个列车中的座位类型。
 
@@ -183,6 +183,10 @@ Primary Key：u_userid
 | o_seattype      | 座位类型   | enum     |                                                              |
 
 Primary Key：o_orderid
+
+
+
+
 
 ### 范式分析
 
